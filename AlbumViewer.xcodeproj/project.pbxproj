@@ -8,12 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		0C40B0BA202CC802007D4B0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0B9202CC802007D4B0F /* AppDelegate.swift */; };
-		0C40B0BC202CC802007D4B0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0BB202CC802007D4B0F /* ViewController.swift */; };
 		0C40B0BF202CC802007D4B0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C40B0BD202CC802007D4B0F /* Main.storyboard */; };
 		0C40B0C1202CC802007D4B0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C40B0C0202CC802007D4B0F /* Assets.xcassets */; };
 		0C40B0C4202CC802007D4B0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C40B0C2202CC802007D4B0F /* LaunchScreen.storyboard */; };
 		0C40B0CF202CC802007D4B0F /* AlbumViewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0CE202CC802007D4B0F /* AlbumViewerTests.swift */; };
 		0C40B0DA202CC802007D4B0F /* AlbumViewerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0D9202CC802007D4B0F /* AlbumViewerUITests.swift */; };
+		0C40B0E8202CC884007D4B0F /* Brain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0E7202CC884007D4B0F /* Brain.swift */; };
+		0C4AFF642033E91400DFDE72 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0C4AFF632033E91400DFDE72 /* README.md */; };
+		0C6E1E732031464D00F2A15B /* SearchCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */; };
+		0CD18CF4202D4370004B4DEC /* AlbumsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CF3202D4370004B4DEC /* AlbumsCollectionViewController.swift */; };
+		0CD18CFC202D4FEB004B4DEC /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */; };
+		0CD18CFE202D59B2004B4DEC /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CFD202D59B2004B4DEC /* DetailsViewController.swift */; };
+		0CE4C73A2032591A0043681D /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4C7392032591A0043681D /* TrackTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +42,6 @@
 /* Begin PBXFileReference section */
 		0C40B0B6202CC802007D4B0F /* AlbumViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlbumViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C40B0B9202CC802007D4B0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0C40B0BB202CC802007D4B0F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0C40B0BE202CC802007D4B0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0C40B0C0202CC802007D4B0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0C40B0C3202CC802007D4B0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +52,13 @@
 		0C40B0D5202CC802007D4B0F /* AlbumViewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlbumViewerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C40B0D9202CC802007D4B0F /* AlbumViewerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewerUITests.swift; sourceTree = "<group>"; };
 		0C40B0DB202CC802007D4B0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0C40B0E7202CC884007D4B0F /* Brain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Brain.swift; sourceTree = "<group>"; };
+		0C4AFF632033E91400DFDE72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionReusableView.swift; sourceTree = "<group>"; };
+		0CD18CF3202D4370004B4DEC /* AlbumsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCollectionViewController.swift; sourceTree = "<group>"; };
+		0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		0CD18CFD202D59B2004B4DEC /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		0CE4C7392032591A0043681D /* TrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +89,7 @@
 		0C40B0AD202CC802007D4B0F = {
 			isa = PBXGroup;
 			children = (
+				0C4AFF632033E91400DFDE72 /* README.md */,
 				0C40B0B8202CC802007D4B0F /* AlbumViewer */,
 				0C40B0CD202CC802007D4B0F /* AlbumViewerTests */,
 				0C40B0D8202CC802007D4B0F /* AlbumViewerUITests */,
@@ -97,11 +110,12 @@
 		0C40B0B8202CC802007D4B0F /* AlbumViewer */ = {
 			isa = PBXGroup;
 			children = (
-				0C40B0B9202CC802007D4B0F /* AppDelegate.swift */,
-				0C40B0BB202CC802007D4B0F /* ViewController.swift */,
 				0C40B0BD202CC802007D4B0F /* Main.storyboard */,
+				0C40B0E7202CC884007D4B0F /* Brain.swift */,
+				0CD18CF9202D4C5A004B4DEC /* AlbumsViewController */,
+				0CE4C73B203259460043681D /* DetailViewController */,
+				0CD18CFA202D4C71004B4DEC /* Supporting Files */,
 				0C40B0C0202CC802007D4B0F /* Assets.xcassets */,
-				0C40B0C2202CC802007D4B0F /* LaunchScreen.storyboard */,
 				0C40B0C5202CC802007D4B0F /* Info.plist */,
 			);
 			path = AlbumViewer;
@@ -123,6 +137,34 @@
 				0C40B0DB202CC802007D4B0F /* Info.plist */,
 			);
 			path = AlbumViewerUITests;
+			sourceTree = "<group>";
+		};
+		0CD18CF9202D4C5A004B4DEC /* AlbumsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0CD18CF3202D4370004B4DEC /* AlbumsCollectionViewController.swift */,
+				0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */,
+				0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */,
+			);
+			path = AlbumsViewController;
+			sourceTree = "<group>";
+		};
+		0CD18CFA202D4C71004B4DEC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0C40B0B9202CC802007D4B0F /* AppDelegate.swift */,
+				0C40B0C2202CC802007D4B0F /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0CE4C73B203259460043681D /* DetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0CD18CFD202D59B2004B4DEC /* DetailsViewController.swift */,
+				0CE4C7392032591A0043681D /* TrackTableViewCell.swift */,
+			);
+			path = DetailViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +276,7 @@
 			files = (
 				0C40B0C4202CC802007D4B0F /* LaunchScreen.storyboard in Resources */,
 				0C40B0C1202CC802007D4B0F /* Assets.xcassets in Resources */,
+				0C4AFF642033E91400DFDE72 /* README.md in Resources */,
 				0C40B0BF202CC802007D4B0F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +302,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C40B0BC202CC802007D4B0F /* ViewController.swift in Sources */,
+				0CD18CF4202D4370004B4DEC /* AlbumsCollectionViewController.swift in Sources */,
+				0C40B0E8202CC884007D4B0F /* Brain.swift in Sources */,
 				0C40B0BA202CC802007D4B0F /* AppDelegate.swift in Sources */,
+				0C6E1E732031464D00F2A15B /* SearchCollectionReusableView.swift in Sources */,
+				0CD18CFC202D4FEB004B4DEC /* AlbumCollectionViewCell.swift in Sources */,
+				0CD18CFE202D59B2004B4DEC /* DetailsViewController.swift in Sources */,
+				0CE4C73A2032591A0043681D /* TrackTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
