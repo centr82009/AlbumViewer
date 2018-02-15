@@ -12,7 +12,7 @@ Test application
 
 ## To Do
 - [ ] GCD
-- [ ] Code comments
+- [x] Code comments
 - [ ] UI Tests
 - [ ] Unit Tests
 - [ ] App Icon

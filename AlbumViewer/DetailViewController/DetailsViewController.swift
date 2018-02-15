@@ -25,11 +25,12 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        trackTableView.rowHeight = 44
         uiSetUp()
     }
     
+    /// Set up elements on a screen.
     func uiSetUp() {
+        trackTableView.rowHeight = 44
         costLabel.makeRounded()
         explicitLabel.makeRounded()
         albumArtworkImageView.makeRounded()
@@ -77,6 +78,21 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    //MARK: - IBActions
+    @IBAction func artistNameButtonPressed(_ sender: UIButton) {
+        if let url = currentAlbum?.artistViewUrl {
+            url.openInAppOrSafari()
+        }
+    }
+    
+    @IBAction func showInItunes(_ sender: UIBarButtonItem) {
+        if let url = currentAlbum?.collectionViewUrl {
+            url.openInAppOrSafari()
+        }
+    }
+    
+    //MARK: - TableView
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return trackCount ?? 0
     }
@@ -94,22 +110,11 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             url.openInAppOrSafari()
         }
     }
-
-    @IBAction func artistNameButtonPressed(_ sender: UIButton) {
-        if let url = currentAlbum?.artistViewUrl {
-            url.openInAppOrSafari()
-        }
-    }
-    
-    @IBAction func showInItunes(_ sender: UIBarButtonItem) {
-        if let url = currentAlbum?.collectionViewUrl {
-            url.openInAppOrSafari()
-        }
-    }
 }
 
 extension URL {
     
+    /// Open url in native app or in Safari.
     func openInAppOrSafari() {
         if UIApplication.shared.canOpenURL(self) {
             if #available(iOS 10.0, *) {

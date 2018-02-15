@@ -8,8 +8,14 @@
 
 import Foundation
 
+/// Model class responsible for loading and parse data.
 class Brain {
     
+    // MARK: - Download data functions
+    /// Search albums in iTunes database by name, download and parse it.
+    ///
+    /// - parameter name: searching string.
+    /// - parameter completion: completion block for data pass.
     func getAlbums(for name: String, completion: @escaping ((_ data: AlbumItunesData?) -> Void)) {
         let semaphore = DispatchSemaphore(value: 0)
         var albumItunesData: AlbumItunesData?
@@ -33,6 +39,10 @@ class Brain {
         }
     }
     
+    /// Search tracks in iTunes database by collectionId, download and parse it.
+    ///
+    /// - parameter for: collectionId.
+    /// - parameter completion: completion block for data pass.
     func getTracks(for collectionId: Int, completion: @escaping ((_ data: TrackItunesData?) -> Void)) {
         let semaphore = DispatchSemaphore(value: 0)
         var trackItunesData: TrackItunesData?
@@ -54,6 +64,8 @@ class Brain {
     }
 }
 
+// MARK: - Classes for data parse
+/// Model class of tracks.
 struct TrackItunesData: Codable {
     
     let resultCount: Int
@@ -65,6 +77,7 @@ struct TrackItunesData: Codable {
     }
 }
 
+/// Model class of albums.
 struct AlbumItunesData: Codable {
     
     var resultCount: Int

@@ -9,7 +9,10 @@
 import UIKit
 
 private let reuseIdentifier = "Cell"
+
+///Model instance
 private let brain = Brain()
+
 private let searchCollectionReusableView = SearchCollectionReusableView()
 
 private var albumItunesData: AlbumItunesData? {
@@ -18,9 +21,12 @@ private var albumItunesData: AlbumItunesData? {
         albums = albumItunesData?.results
     }
 }
+
 private var albumsCount: Int?
+
 private var albums: [AlbumItunesData.Album]?
 
+// We delete 1 in trackCount cause in in the first element stores information about the album.
 private var trackItunesData: TrackItunesData? {
     didSet {
         tracks = trackItunesData?.results
@@ -31,7 +37,10 @@ private var trackItunesData: TrackItunesData? {
         }
     }
 }
+
 private var trackCount: Int?
+
+// We delete 1st element in tracks cause in in the first element stores information about the album.
 private var tracks: [TrackItunesData.Track]? {
     didSet {
         tracks?.remove(at: 0)
@@ -48,6 +57,8 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         hideKeyboardWhenTappedAround()
     }
     
+    // MARK: - Take data from model
+    
     private func useAlbumData(data: AlbumItunesData?) {
         albumItunesData = data
     }
@@ -55,11 +66,6 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     private func useTrackData(data: TrackItunesData?) {
         trackItunesData = data
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     
     // MARK: - Navigation
     
@@ -79,7 +85,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         }
     }
     
-    // MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return albumsCount ?? 0
@@ -101,7 +107,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         return cell
     }
     
-    // MARK: SearchBar
+    // MARK: - SearchBar
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
@@ -140,6 +146,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     }
 }
 
+///Contains currency data
 enum Currency: String {
     case USD = "$"
     case RUB = "₽"
@@ -147,6 +154,11 @@ enum Currency: String {
 }
 
 extension UIImageView {
+    
+    /// Download image by URL.
+    ///
+    /// - parameter url: image url.
+    /// - parameter mode : Mode of image.
     func downloadedFrom(url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {
         contentMode = mode
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -161,6 +173,11 @@ extension UIImageView {
             }
             }.resume()
     }
+    
+    /// Download image by link.
+    ///
+    /// - parameter link: image url as String.
+    /// - parameter mode : Mode of image.
     func downloadedFrom(link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {
         guard let url = URL(string: link) else { return }
         downloadedFrom(url: url, contentMode: mode)
@@ -168,6 +185,8 @@ extension UIImageView {
 }
 
 extension UIView {
+    
+    /// Make view corners rounded.
     func makeRounded() {
         self.layer.cornerRadius = 8.0
         self.clipsToBounds = true
@@ -175,6 +194,8 @@ extension UIView {
 }
 
 extension UIViewController {
+    
+    /// Hide keyboard when you tapped around.
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -187,6 +208,11 @@ extension UIViewController {
 }
 
 extension Date {
+    
+    /// Formatte date.
+    ///
+    /// - parameter string: date for formatte.
+    /// - returns: formatted date.
     static func getFormattedDate(from string: String) -> String{
         let dateFormatterGet = DateFormatter()
         dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
