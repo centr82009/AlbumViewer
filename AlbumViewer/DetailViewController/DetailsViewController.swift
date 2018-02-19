@@ -45,9 +45,10 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             artistNameButton.setTitle(currentAlbum.artistName, for: .normal)
             dateLabel.text = Date.getFormattedDate(from: currentAlbum.releaseDate)
             genderLabel.text = currentAlbum.primaryGenreName
-            tracksCountLabel.text = "Tracks count: \(trackCount ?? 0)"
-            copyrightLabel.text = currentAlbum.copyright ?? " "
             
+            tracksCountLabel.text = "Tracks count: \(trackCount ?? 0)"
+            
+            copyrightLabel.text = currentAlbum.copyright ?? " "
             if String(describing: currentAlbum.artworkUrl60) != "" {
                 albumArtworkImageView.downloadedFrom(url: currentAlbum.artworkUrl60)
             } else {

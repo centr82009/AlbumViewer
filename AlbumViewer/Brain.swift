@@ -16,7 +16,7 @@ class Brain {
     ///
     /// - parameter name: searching string.
     /// - parameter completion: completion block for data pass.
-    func getAlbums(for name: String, completion: @escaping ((_ data: AlbumItunesData?) -> Void)) {
+    func getAlbums(for name: String, completion: @escaping (((AlbumItunesData?, error: Error?)) -> Void)) {
         let semaphore = DispatchSemaphore(value: 0)
         var albumItunesData: AlbumItunesData?
         let urlString = "https://itunes.apple.com/search?term=\(name)&media=music&entity=album"
@@ -24,14 +24,18 @@ class Brain {
             guard let url = URL(string: encoded) else { return }
             let session = URLSession.shared
             session.dataTask(with: url) { (data, response, error) in
-                guard let data = data else { return }
+                guard let data = data else {
+                    completion((albumItunesData, error))
+                    semaphore.signal()
+                    return
+                }
                 do {
                     let decoder = JSONDecoder()
                     albumItunesData = try decoder.decode(AlbumItunesData.self, from: data)
-                    completion(albumItunesData)
+                    completion((albumItunesData, error))
                     semaphore.signal()
                 } catch {
-                    completion(albumItunesData)
+                    completion((albumItunesData, error))
                     semaphore.signal()
                 }
                 }.resume()
@@ -43,20 +47,24 @@ class Brain {
     ///
     /// - parameter for: collectionId.
     /// - parameter completion: completion block for data pass.
-    func getTracks(for collectionId: Int, completion: @escaping ((_ data: TrackItunesData?) -> Void)) {
+    func getTracks(for collectionId: Int, completion: @escaping (((TrackItunesData?, error: Error?)) -> Void)) {
         let semaphore = DispatchSemaphore(value: 0)
         var trackItunesData: TrackItunesData?
         guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(collectionId)&entity=song") else { return }
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
-            guard let data = data else { return }
+            guard let data = data else {
+                completion((trackItunesData, error))
+                semaphore.signal()
+                return
+            }
             do {
                 let decoder = JSONDecoder()
                 trackItunesData = try decoder.decode(TrackItunesData.self, from: data)
-                completion(trackItunesData)
+                completion((trackItunesData, error))
                 semaphore.signal()
             } catch {
-                completion(trackItunesData)
+                completion((trackItunesData, error))
                 semaphore.signal()
             }
             }.resume()

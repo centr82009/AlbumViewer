@@ -7,7 +7,11 @@ Test application
 
 ## Changhelog
 
-### 0.0.1
+### 0.0.2v
+* Added app icon
+* Small bug fixes
+
+### 0.0.1v
 * Made basic functionality
 
 ## To Do
@@ -15,4 +19,5 @@ Test application
 - [x] Code comments
 - [ ] UI Tests
 - [ ] Unit Tests
-- [ ] App Icon
+- [x] App Icon
+- [ ] Autocomplete for SearchBar

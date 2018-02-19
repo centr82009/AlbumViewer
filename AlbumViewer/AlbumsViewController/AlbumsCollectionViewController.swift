@@ -8,79 +8,106 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
-
-///Model instance
-private let brain = Brain()
-
-private let searchCollectionReusableView = SearchCollectionReusableView()
-
-private var albumItunesData: AlbumItunesData? {
-    didSet {
-        albumsCount = albumItunesData?.resultCount
-        albums = albumItunesData?.results
-    }
-}
-
-private var albumsCount: Int?
-
-private var albums: [AlbumItunesData.Album]?
-
-// We delete 1 in trackCount cause in in the first element stores information about the album.
-private var trackItunesData: TrackItunesData? {
-    didSet {
-        tracks = trackItunesData?.results
-        if let resultCount = trackItunesData?.resultCount {
-            trackCount = resultCount - 1
-        } else {
-            trackCount = 0
+class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDelegate {
+    
+    private let reuseIdentifier = "Cell"
+    
+    ///Model instance
+    private let brain = Brain()
+    
+    private let searchCollectionReusableView = SearchCollectionReusableView()
+    
+    private let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    
+    private var albumItunesData: AlbumItunesData? {
+        didSet {
+            albumsCount = albumItunesData?.resultCount
+            albums = albumItunesData?.results
         }
     }
-}
-
-private var trackCount: Int?
-
-// We delete 1st element in tracks cause in in the first element stores information about the album.
-private var tracks: [TrackItunesData.Track]? {
-    didSet {
-        tracks?.remove(at: 0)
+    
+    private var albumsCount: Int?
+    
+    private var error: Error?
+    
+    private var searchText: String!
+    
+    private var albums: [AlbumItunesData.Album]?
+    
+    // We delete 1 in trackCount cause in in the first element stores information about the album.
+    private var trackItunesData: TrackItunesData? {
+        didSet {
+            tracks = trackItunesData?.results
+            if let resultCount = trackItunesData?.resultCount {
+                trackCount = resultCount - 1
+            } else {
+                trackCount = 0
+            }
+        }
     }
-}
-
-class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDelegate {
+    
+    private var trackCount: Int?
+    
+    // We delete 1st element in tracks cause in in the first element stores information about the album.
+    private var tracks: [TrackItunesData.Track]? {
+        didSet {
+            tracks?.remove(at: 0)
+        }
+    }
     
     @IBOutlet weak var noDataStackView: UIStackView!
     @IBOutlet weak var noDataLabel: UILabel!
+    @IBOutlet weak var reloadButton: UIButton!
+    @IBOutlet weak var noDataImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+       
+        noDataImage.image = #imageLiteral(resourceName: "search")
+        
+        reloadButton.isHidden = true
+        reloadButton.makeRounded()
+        reloadButton.layer.borderWidth = 1
+        reloadButton.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        myActivityIndicator.center = view.center
+        view.addSubview(myActivityIndicator)
     }
     
     // MARK: - Take data from model
     
-    private func useAlbumData(data: AlbumItunesData?) {
-        albumItunesData = data
+    private func useAlbumData(request: (data: AlbumItunesData?, error: Error?)) {
+        albumItunesData = request.data
+        error = request.error
     }
     
-    private func useTrackData(data: TrackItunesData?) {
-        trackItunesData = data
+    private func useTrackData(request: (data: TrackItunesData?, error: Error?)) {
+        trackItunesData = request.data
+        error = request.error
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        noDataStackView.isHidden = false
         if segue.identifier == "DetailsViewSegue" {
             let detailsVC = segue.destination as! DetailsViewController
             let cell = sender as! AlbumCollectionViewCell
             let indexPaths = self.collectionView?.indexPath(for: cell)
+            
+            if let error = error {
+                detailsVC.tracksCountLabel.text = error.localizedDescription
+            }
+            
             if let thisAlbum = albums?[indexPaths!.row], let collectionId = thisAlbum.collectionId {
-                brain.getTracks(for: collectionId, completion: { [weak self] (data: TrackItunesData?) in
-                    self?.useTrackData(data: data)
-                })
+                
+                tracksSearch(for: collectionId)
+                
                 detailsVC.currentAlbum = thisAlbum
                 detailsVC.tracksForCurrentAlbum = tracks
                 detailsVC.trackCount = trackCount
+                noDataStackView.isHidden = true
             }
         }
     }
@@ -107,6 +134,30 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         return cell
     }
     
+    /// Search tracks by collectionId
+    ///
+    /// - parameter collectionId: searching collectionId.
+    func tracksSearch(for collectionId: Int) {
+        myActivityIndicator.startAnimating()
+        brain.getTracks(for: collectionId, completion: { [weak self] (data: TrackItunesData?, error: Error?) in
+            self?.useTrackData(request: (data: data, error: error))
+        })
+        myActivityIndicator.stopAnimating()
+    }
+    
+    /// Search albums by term
+    ///
+    /// - parameter name: searching term.
+    func albumSearch(for name: String) {
+        myActivityIndicator.startAnimating()
+        noDataStackView.isHidden = true
+        brain.getAlbums(for: name, completion: { [weak self] (data: AlbumItunesData?, error: Error?) in
+            self?.useAlbumData(request: (data: data, error: error))
+        })
+        collectionView?.reloadData()
+        myActivityIndicator.stopAnimating()
+    }
+    
     // MARK: - SearchBar
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -120,12 +171,16 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if(!(searchBar.text?.isEmpty)!){
-            makeSearch(sender: searchBar.text!)
-            if albums?.count == 0 || albums == nil {
-                noDataStackView.isHidden = false
-                noDataLabel.text = "No results"
-            }
+        if(!(searchBar.text?.isEmpty)!) {
+            albumSearch(for: searchBar.text!)
+            searchText = searchBar.text!
+        }
+        
+        if error != nil {
+            setupFor(status: .noInternet)
+            
+        } else if albums?.count == 0 || albums == nil {
+            setupFor(status: .noResult)
         }
     }
     
@@ -133,16 +188,55 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         if !(searchText.isEmpty) {
             noDataStackView.isHidden = true
         } else if albums?.count == 0 || albums == nil {
-            noDataStackView.isHidden = false
-            noDataLabel.text = "Start your search"
+            setupFor(status: .startSearch)
         }
     }
     
-    func makeSearch(sender: String) {
-        brain.getAlbums(for: sender, completion: { [weak self] (data: AlbumItunesData?) in
-            self?.useAlbumData(data: data)
-        })
-        collectionView?.reloadData()
+    // MARK: - NoDataStackView
+    
+    /// noDataStackView status.
+    enum ScreenStatus {
+        case startSearch
+        case noResult
+        case noInternet
+    }
+    
+    /// Setup noDataStackView for status.
+    ///
+    /// - parameter status: status for noDataStackView.
+    func setupFor(status: ScreenStatus) {
+        noDataStackView.isHidden = false
+        switch status {
+        case .startSearch:
+            noDataImage.image = #imageLiteral(resourceName: "search")
+            reloadButton.isHidden = true
+            noDataLabel.text = "Start your search"
+        case .noResult:
+            noDataImage.image = #imageLiteral(resourceName: "search")
+            reloadButton.isHidden = true
+            noDataLabel.text = "No results"
+        case .noInternet:
+            noDataImage.image = #imageLiteral(resourceName: "noInternet")
+            reloadButton.isHidden = false
+            noDataLabel.text = error!.localizedDescription
+        }
+    }
+    
+    @IBAction func refreshButton(_ sender: UIButton) {
+        albumSearch(for: searchText)
+        
+        if error != nil {
+            setupFor(status: .noInternet)
+            
+        } else if albums?.count == 0 || albums == nil {
+            setupFor(status: .noResult)
+        } else {
+            reloadButton.isHidden = true
+        }
+    }
+    
+    func setupActivityIndicator() {
+        
     }
 }
 
