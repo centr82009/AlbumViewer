@@ -112,7 +112,8 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
 
             if let price = currentAlbum.collectionPrice {
-                costLabel.text = String("\(price) \(currentAlbum.currency.сurrencyIconFromAbbreviation)")
+                let currencyIcon = currentAlbum.currency.сurrencyIconFromAbbreviation()
+                costLabel.text = String(price) + currencyIcon
             } else {
                 costLabel.text = "Free"
             }
@@ -157,7 +158,7 @@ extension String {
     
     /// Convert currency from abbreviation to icon
     ///
-    /// - returns: abbreviation.
+    /// - returns: abbreviation
     func сurrencyIconFromAbbreviation() -> String {
         switch self {
         case "USD":
@@ -167,7 +168,7 @@ extension String {
         case "EUR":
             return "€"
         default:
-            return ""
+            return "?"
         }
     }
 }
