@@ -19,13 +19,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="cQE-WF-b7f">
-                                <rect key="frame" x="137.5" y="283" width="100" height="100"/>
+                                <rect key="frame" x="159" y="305" width="57" height="57"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Obq-Wv-Wia"/>
-                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="VcH-Mm-A99"/>
+                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gVI-jS-TKJ"/>
+                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="tNk-8u-dag"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -36,6 +36,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="search" width="100" height="100"/>
+        <image name="search" width="57" height="57"/>
     </resources>
 </document>

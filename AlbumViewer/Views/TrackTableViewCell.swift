@@ -11,7 +11,7 @@ import UIKit
 class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var trackNumberLabel: UILabel!
     @IBOutlet weak var trackNameLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

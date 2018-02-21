@@ -14,7 +14,7 @@
         <scene sceneID="mOV-ns-l5O">
             <objects>
                 <collectionViewController id="kLy-Xo-Pim" customClass="AlbumsCollectionViewController" customModule="AlbumViewer" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Yy5-nl-xud">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" id="Yy5-nl-xud">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -28,22 +28,17 @@
                             <rect key="frame" x="0.0" y="-88" width="375" height="812"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vmG-2q-T81">
-                                    <rect key="frame" x="117" y="371" width="140" height="169"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="rBn-C9-DKY">
-                                            <rect key="frame" x="20" y="34" width="100" height="100"/>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Start your search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="GyE-rA-7Cn">
-                                            <rect key="frame" x="4" y="74" width="132" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </stackView>
+                                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rBn-C9-DKY">
+                                    <rect key="frame" x="159" y="378" width="57" height="57"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start your search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="GyE-rA-7Cn">
+                                    <rect key="frame" x="121" y="443" width="132" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DJG-qm-yEz">
-                                    <rect key="frame" x="147" y="548" width="80" height="30"/>
+                                    <rect key="frame" x="147" y="472" width="80" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="JRE-U3-Wwu"/>
                                     </constraints>
@@ -57,10 +52,12 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="DJG-qm-yEz" firstAttribute="centerX" secondItem="HVH-v1-C28" secondAttribute="centerX" id="Jjd-ya-sfT"/>
-                                <constraint firstItem="vmG-2q-T81" firstAttribute="centerY" secondItem="HVH-v1-C28" secondAttribute="centerY" id="fxd-ZO-ONb"/>
-                                <constraint firstItem="vmG-2q-T81" firstAttribute="centerX" secondItem="HVH-v1-C28" secondAttribute="centerX" id="lqk-F5-AXp"/>
-                                <constraint firstItem="DJG-qm-yEz" firstAttribute="top" secondItem="vmG-2q-T81" secondAttribute="bottom" constant="8" id="xZ2-AM-juT"/>
+                                <constraint firstItem="rBn-C9-DKY" firstAttribute="centerY" secondItem="HVH-v1-C28" secondAttribute="centerY" id="CCI-X7-sGR"/>
+                                <constraint firstItem="GyE-rA-7Cn" firstAttribute="top" secondItem="rBn-C9-DKY" secondAttribute="bottom" constant="8" id="Hn2-AP-iEZ"/>
+                                <constraint firstItem="GyE-rA-7Cn" firstAttribute="centerX" secondItem="HVH-v1-C28" secondAttribute="centerX" id="PzN-bT-FM5"/>
+                                <constraint firstItem="rBn-C9-DKY" firstAttribute="centerX" secondItem="HVH-v1-C28" secondAttribute="centerX" id="V2z-dh-h4S"/>
+                                <constraint firstItem="DJG-qm-yEz" firstAttribute="centerX" secondItem="HVH-v1-C28" secondAttribute="centerX" id="ggc-gt-pay"/>
+                                <constraint firstItem="DJG-qm-yEz" firstAttribute="top" secondItem="GyE-rA-7Cn" secondAttribute="bottom" constant="8" id="pyC-1p-prE"/>
                             </constraints>
                         </view>
                         <cells>
@@ -125,7 +122,7 @@
                             <subviews>
                                 <searchBar contentMode="redraw" text="" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="w06-33-KRE">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                     <connections>
                                         <outlet property="delegate" destination="kLy-Xo-Pim" id="lgG-FS-bEt"/>
                                     </connections>
@@ -153,7 +150,6 @@
                         <outlet property="collectionView" destination="Yy5-nl-xud" id="OZe-Mv-I8r"/>
                         <outlet property="noDataImage" destination="rBn-C9-DKY" id="eyI-jn-tCh"/>
                         <outlet property="noDataLabel" destination="GyE-rA-7Cn" id="qGV-YS-b0m"/>
-                        <outlet property="noDataStackView" destination="vmG-2q-T81" id="Y7c-Hx-FHl"/>
                         <outlet property="reloadButton" destination="DJG-qm-yEz" id="PvA-6F-XWO"/>
                     </connections>
                 </collectionViewController>
@@ -361,6 +357,6 @@
     </scenes>
     <resources>
         <image name="noArtwork" width="100" height="100"/>
-        <image name="search" width="100" height="100"/>
+        <image name="search" width="57" height="57"/>
     </resources>
 </document>
