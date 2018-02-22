@@ -54,10 +54,9 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
+        cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
         if let albumArtworkURL = albumItunesData?.results[indexPath.row].artworkUrl100 {
             cell.albumImageView.downloadedFrom(url: albumArtworkURL)
-        } else {
-            cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
         }
 
         cell.albumNameLabel.text = albumItunesData?.results[indexPath.row].collectionName
@@ -87,7 +86,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" && albumItunesData?.results == nil {
+        if searchText == "" && (albumItunesData?.resultCount == nil || albumItunesData?.resultCount == 0) {
             setupFor(status: .startSearch)
         } else {
             setupFor(status: .haveResult)
@@ -159,29 +158,30 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
             session.dataTask(with: url) { (data, response, error) in
                 guard let data = data else {
                     DispatchQueue.main.async {
+                        self.albumItunesData = nil
                         self.setupFor(status: .error, error: error)
+                        self.collectionView?.reloadData()
                     }
                     return
                 }
                 do {
                     let decoder = JSONDecoder()
                     self.albumItunesData = nil
-                    var albumItunesData = try decoder.decode(AlbumItunesData.self, from: data)
-                    albumItunesData.resultCount -= 1
-                    self.albumItunesData = albumItunesData
-                    
-                    if albumItunesData.resultCount == 0 {
-                        DispatchQueue.main.async {
-                            self.setupFor(status: .noResult)
-                        }
-                    }
+                    self.albumItunesData = try decoder.decode(AlbumItunesData.self, from: data)
                     
                     DispatchQueue.main.async {
+                        if self.albumItunesData?.resultCount == 0 {
+                            self.setupFor(status: .noResult)
+                        } else {
+                            self.setupFor(status: .haveResult)
+                        }
                         self.collectionView?.reloadData()
                     }
                 } catch {
                     DispatchQueue.main.async {
+                        self.albumItunesData = nil
                         self.setupFor(status: .error, error: error)
+                        self.collectionView?.reloadData()
                     }
                 }
                 }.resume()
