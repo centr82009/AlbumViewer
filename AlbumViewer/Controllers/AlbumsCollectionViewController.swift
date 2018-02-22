@@ -11,78 +11,25 @@ import UIKit
 class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDelegate {
 
     private let reuseIdentifier = "Cell"
-    private let albumModel = AlbumModel()
     private let searchCollectionReusableView = SearchCollectionReusableView()
     private var searchText: String!
-
-    private var error: Error? {
-        didSet {
-            if error != nil {
-                DispatchQueue.main.async {
-                    self.setupFor(status: .error)
-                }
-            }
-        }
-    }
-    
-    private var albumItunesData: AlbumItunesData? {
-        didSet {
-            albumsCount = albumItunesData?.resultCount
-            albums = albumItunesData?.results
-        }
-    }
-    
-    private var albums: [AlbumItunesData.Album]? {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView?.reloadData()
-            }
-        }
-    }
-
-    private var albumsCount: Int! {
-        willSet {
-            if newValue == 0 {
-                DispatchQueue.main.async {
-                    self.setupFor(status: .noResult)
-                }
-            }
-        }
-    }
+    private var albumItunesData: AlbumItunesData?
     
     @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var reloadButton: UIButton!
     @IBOutlet weak var noDataImage: UIImageView!
 
     @IBAction func refreshButton(_ sender: UIButton) {
-        albumSearch(for: searchText)
+        getAlbums(for: searchText)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
-
         setupFor(status: .startSearch)
         reloadButton.makeRounded()
         reloadButton.layer.borderWidth = 1
         reloadButton.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-    }
-    
-    // MARK: - Take data from model
-    
-    /// Search albums by term
-    ///
-    /// - parameter name: searching term.
-    private func albumSearch(for name: String) {
-        setupFor(status: .haveResult)
-        albumModel.getAlbums(for: name, completion: { [weak self] (data: AlbumItunesData?, error: Error?) in
-            self?.useAlbumData(request: (data: data, error: error))
-        })
-    }
-
-    private func useAlbumData(request: (data: AlbumItunesData?, error: Error?)) {
-        albumItunesData = request.data
-        error = request.error
     }
     
     // MARK: - Navigation
@@ -93,7 +40,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
             let cell = sender as! AlbumCollectionViewCell
             let indexPaths = self.collectionView?.indexPath(for: cell)
 
-            if let thisAlbum = albums?[indexPaths!.row] {
+            if let thisAlbum = albumItunesData?.results[indexPaths!.row] {
                     detailsVC.currentAlbum = thisAlbum
             }
         }
@@ -102,19 +49,19 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     // MARK: - UICollectionViewDataSource
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return albumsCount ?? 0
+        return albumItunesData?.resultCount ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
-        if let albumArtworkURL = albums?[indexPath.row].artworkUrl100 {
+        if let albumArtworkURL = albumItunesData?.results[indexPath.row].artworkUrl100 {
             cell.albumImageView.downloadedFrom(url: albumArtworkURL)
         } else {
             cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
         }
 
-        cell.albumNameLabel.text = albums?[indexPath.row].collectionName
-        cell.albumAuthorLabel.text = albums?[indexPath.row].artistName
+        cell.albumNameLabel.text = albumItunesData?.results[indexPath.row].collectionName
+        cell.albumAuthorLabel.text = albumItunesData?.results[indexPath.row].artistName
         cell.albumImageView.layer.cornerRadius = 10
         cell.albumImageView.layer.masksToBounds = true
 
@@ -133,14 +80,14 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if (!(searchBar.text?.isEmpty)!) {
-            albumSearch(for: searchBar.text!)
+            getAlbums(for: searchBar.text!)
             searchText = searchBar.text!
             searchBar.endEditing(true)
         }
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" && albums == nil {
+        if searchText == "" && albumItunesData?.results == nil {
             setupFor(status: .startSearch)
         } else {
             setupFor(status: .haveResult)
@@ -169,7 +116,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     /// Setup noDataStackView for status.
     ///
     /// - parameter status: status for noDataStackView.
-    private func setupFor(status: ScreenStatus) {
+    private func setupFor(status: ScreenStatus, error: Error? = nil) {
         switch status {
         case .haveResult:
             noDataStuffIsHidden(true)
@@ -184,7 +131,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         case .error:
             noDataStuffIsHidden(false)
             reloadButton.isHidden = false
-            noDataLabel.text = error!.localizedDescription
+            noDataLabel.text = error?.localizedDescription
         }
     }
     
@@ -200,6 +147,46 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         view.endEditing(true)
     }
     
+    /// Search albums in iTunes database by name, download and parse it.
+    ///
+    /// - parameter name: searching string.
+    /// - parameter completion: completion block for data pass.
+    func getAlbums(for name: String ) {
+        let urlString = "https://itunes.apple.com/search?term=\(name)&media=music&entity=album"
+        if let encoded = urlString.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) {
+            guard let url = URL(string: encoded) else { return }
+            let session = URLSession.shared
+            session.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        self.setupFor(status: .error, error: error)
+                    }
+                    return
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    self.albumItunesData = nil
+                    var albumItunesData = try decoder.decode(AlbumItunesData.self, from: data)
+                    albumItunesData.resultCount -= 1
+                    self.albumItunesData = albumItunesData
+                    
+                    if albumItunesData.resultCount == 0 {
+                        DispatchQueue.main.async {
+                            self.setupFor(status: .noResult)
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.collectionView?.reloadData()
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.setupFor(status: .error, error: error)
+                    }
+                }
+                }.resume()
+        }
+    }
 }
 
 extension UIImageView {
@@ -221,15 +208,6 @@ extension UIImageView {
                 self.image = image
             }
             }.resume()
-    }
-    
-    /// Download image by link.
-    ///
-    /// - parameter link: image url as String.
-    /// - parameter mode : Mode of image.
-    func downloadedFrom(link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {
-        guard let url = URL(string: link) else { return }
-        downloadedFrom(url: url, contentMode: mode)
     }
 }
 

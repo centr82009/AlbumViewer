@@ -19,66 +19,12 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var trackTableView: UITableView!
     @IBOutlet weak var tracksCountLabel: UILabel!
     
-    private let trackModel = TrackModel()
     var currentAlbum: AlbumItunesData.Album!
-    
-    private var trackCount: Int! {
-        didSet {
-            DispatchQueue.main.async {
-                self.tracksCountLabel.text = "Tracks count: \(self.trackCount!)"
-            }
-        }
-    }
-    
-    // We delete 1 in trackCount cause in in the first element stores information about the album.
-    private var trackItunesData: TrackItunesData? {
-        didSet {
-            tracks = trackItunesData?.results
-            if let resultCount = trackItunesData?.resultCount {
-                trackCount = resultCount - 1
-            } else {
-                trackCount = 0
-            }
-        }
-    }
-    
-    private var error: Error? {
-        didSet {
-            if error != nil {
-                DispatchQueue.main.async {
-                    self.tracksCountLabel.text = self.error!.localizedDescription
-                }
-            }
-        }
-    }
-    
-    // We delete 1st element in tracks cause in in the first element stores information about the album.
-    private var tracks: [TrackItunesData.Track]? {
-        didSet {
-            tracks?.remove(at: 0)
-            DispatchQueue.main.async {
-                self.trackTableView.reloadData()
-            }
-        }
-    }
-
-    private func useTrackData(request: (data: TrackItunesData?, error: Error?)) {
-        trackItunesData = request.data
-        error = request.error
-    }
-    
-    /// Search tracks by collectionId
-    ///
-    /// - parameter collectionId: searching collectionId.
-    private func tracksSearch(for collectionId: Int) {
-        trackModel.getTracks(for: collectionId, completion: { [weak self] (data: TrackItunesData?, error: Error?) in
-            self?.useTrackData(request: (data: data, error: error))
-        })
-    }
+    private var trackItunesData: TrackItunesData?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tracksSearch(for: currentAlbum.collectionId!)
+        getTracks(for: currentAlbum.collectionId!)
         uiSetUp()
     }
 
@@ -136,21 +82,53 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: - TableView
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trackCount ?? 0
+        return trackItunesData?.resultCount ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "track") as! TrackTableViewCell
-        cell.trackNameLabel.text = tracks?[indexPath.row].trackName
+        cell.trackNameLabel.text = trackItunesData?.results[indexPath.row].trackName
         cell.trackNumberLabel.text = String(indexPath.row + 1)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        if let url = tracks?[indexPath.row].trackViewUrl {
+        if let url = trackItunesData?.results[indexPath.row].trackViewUrl {
             url.openInAppOrSafari()
         }
+    }
+    
+    /// Search tracks in iTunes database by collectionId, download and parse it.
+    ///
+    /// - parameter for: collectionId.
+    /// - parameter completion: completion block for data pass.
+    func getTracks(for collectionId: Int) {
+        guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(collectionId)&entity=song") else { return }
+        let session = URLSession.shared
+        session.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    self.tracksCountLabel.text = error!.localizedDescription
+                }
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                var outputData = try decoder.decode(TrackItunesData.self, from: data)
+                outputData.results.remove(at: 0)
+                outputData.resultCount -= 1
+                self.trackItunesData = outputData
+                DispatchQueue.main.async {
+                    self.tracksCountLabel.text = "Tracks count: \(outputData.resultCount)"
+                    self.trackTableView.reloadData()
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.tracksCountLabel.text = error.localizedDescription
+                }
+            }
+            }.resume()
     }
 }
 
