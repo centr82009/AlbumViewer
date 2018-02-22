@@ -18,14 +18,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="cQE-WF-b7f">
-                                <rect key="frame" x="159" y="305" width="57" height="57"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="CSJ-aT-2Eq">
+                                <rect key="frame" x="157" y="303" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="Hsp-me-mqF"/>
+                                    <constraint firstAttribute="height" constant="60" id="fYZ-CK-Wv0"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gVI-jS-TKJ"/>
-                            <constraint firstItem="cQE-WF-b7f" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="tNk-8u-dag"/>
+                            <constraint firstItem="CSJ-aT-2Eq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="J0D-7X-NBo"/>
+                            <constraint firstItem="CSJ-aT-2Eq" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Rdt-bT-Z8o"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -36,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="search" width="57" height="57"/>
+        <image name="search" width="60" height="60"/>
     </resources>
 </document>

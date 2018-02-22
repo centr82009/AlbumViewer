@@ -54,9 +54,11 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
-        cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
+        cell.albumImageView.image = nil
         if let albumArtworkURL = albumItunesData?.results[indexPath.row].artworkUrl100 {
             cell.albumImageView.downloadedFrom(url: albumArtworkURL)
+        } else {
+            cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
         }
 
         cell.albumNameLabel.text = albumItunesData?.results[indexPath.row].collectionName
@@ -86,7 +88,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" && (albumItunesData?.resultCount == nil || albumItunesData?.resultCount == 0) {
+        if searchText.isEmpty && (albumItunesData?.resultCount == nil || albumItunesData?.resultCount == 0) {
             setupFor(status: .startSearch)
         } else {
             setupFor(status: .haveResult)
