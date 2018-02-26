@@ -1,5 +1,5 @@
 //
-//  Brain.swift
+//  AlbumModel.swift
 //  AlbumViewer
 //
 //  Created by Mazeev Roman on 08.02.2018.

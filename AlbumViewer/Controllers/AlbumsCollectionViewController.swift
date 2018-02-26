@@ -1,5 +1,5 @@
 //
-//  HomeCollectionViewController.swift
+//  AlbumsCollectionViewController.swift
 //  AlbumViewer
 //
 //  Created by Mazeev Roman on 09.02.2018.

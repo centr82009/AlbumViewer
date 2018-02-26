@@ -1,5 +1,5 @@
 //
-//  noDataView.swift
+//  NoDataView.swift
 //  AlbumViewer
 //
 //  Created by Mazeev Roman on 26.02.2018.
