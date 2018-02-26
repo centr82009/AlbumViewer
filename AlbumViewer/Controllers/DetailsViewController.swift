@@ -18,27 +18,13 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var trackTableView: UITableView!
     @IBOutlet weak var tracksCountLabel: UILabel!
-    
+
     var currentAlbum: AlbumItunesData.Album!
     private var trackItunesData: TrackItunesData?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         getTracks(for: currentAlbum.collectionId!)
-        uiSetUp()
-    }
-
-    /// Set up elements on a screen.
-    private func uiSetUp() {
-        trackTableView.rowHeight = 44
-        costLabel.makeRounded()
-        explicitLabel.makeRounded()
-        albumArtworkImageView.makeRounded()
-
-        costLabel.layer.borderWidth = 1
-        costLabel.layer.borderColor = #colorLiteral(red: 0.1058823529, green: 0.6784313725, blue: 0.9725490196, alpha: 1)
-        explicitLabel.layer.borderWidth = 1
-        explicitLabel.layer.borderColor = #colorLiteral(red: 1, green: 0.231372549, blue: 0.1882352941, alpha: 1)
 
         if let currentAlbum = currentAlbum {
             self.title = currentAlbum.collectionName
@@ -86,10 +72,10 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = trackTableView.dequeueReusableCell(withIdentifier: "track") as! TrackTableViewCell
-        cell.trackNameLabel.text = trackItunesData?.results[indexPath.row].trackName
-        cell.trackNumberLabel.text = String(indexPath.row + 1)
-        return cell
+        let cell = trackTableView.dequeueReusableCell(withIdentifier: "track") as? TrackTableViewCell
+        cell?.trackNameLabel.text = trackItunesData?.results[indexPath.row].trackName
+        cell?.trackNumberLabel.text = String(indexPath.row + 1)
+        return cell!
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -98,7 +84,11 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             url.openInAppOrSafari()
         }
     }
-    
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+
     /// Search tracks in iTunes database by collectionId, download and parse it.
     ///
     /// - parameter for: collectionId.
@@ -106,7 +96,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func getTracks(for collectionId: Int) {
         guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(collectionId)&entity=song") else { return }
         let session = URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) { (data, _, error) in
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.tracksCountLabel.text = error!.localizedDescription
@@ -133,7 +123,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
 }
 
 extension String {
-    
+
     /// Convert currency from abbreviation to icon
     ///
     /// - returns: abbreviation

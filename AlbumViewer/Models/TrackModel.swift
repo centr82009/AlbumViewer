@@ -9,13 +9,12 @@
 import Foundation
 
 struct TrackItunesData: Codable {
-    
+
     var resultCount: Int
     var results: [Track]
-    
+
     struct Track: Codable {
         let trackName: String?
         let trackViewUrl: URL?
     }
 }
-

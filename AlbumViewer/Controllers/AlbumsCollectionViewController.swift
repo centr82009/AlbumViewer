@@ -10,77 +10,77 @@ import UIKit
 
 class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDelegate {
 
-    private let reuseIdentifier = "Cell"
-    private let searchCollectionReusableView = SearchCollectionReusableView()
-    private var searchText: String!
     private var albumItunesData: AlbumItunesData?
-    
-    @IBOutlet weak var noDataLabel: UILabel!
-    @IBOutlet weak var reloadButton: UIButton!
-    @IBOutlet weak var noDataImage: UIImageView!
 
-    @IBAction func refreshButton(_ sender: UIButton) {
-        getAlbums(for: searchText)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+
+        noDataView.center = (collectionView?.center)!
+        noDataView.reloadButton.addTarget(self, action: #selector(refreshButton(_:)), for: .touchUpInside)
         setupFor(status: .startSearch)
-        reloadButton.makeRounded()
-        reloadButton.layer.borderWidth = 1
-        reloadButton.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
-    
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailsViewSegue" {
-            let detailsVC = segue.destination as! DetailsViewController
-            let cell = sender as! AlbumCollectionViewCell
-            let indexPaths = self.collectionView?.indexPath(for: cell)
+            let detailsVC = segue.destination as? DetailsViewController
+            let cell = sender as? AlbumCollectionViewCell
+            let indexPaths = self.collectionView?.indexPath(for: cell!)
 
             if let thisAlbum = albumItunesData?.results[indexPaths!.row] {
-                    detailsVC.currentAlbum = thisAlbum
+                detailsVC?.currentAlbum = thisAlbum
             }
         }
     }
 
     // MARK: - UICollectionViewDataSource
 
+    private let reuseIdentifier = "Cell"
+
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return albumItunesData?.resultCount ?? 0
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
-        cell.albumImageView.image = nil
+    override func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                                      for: indexPath) as? AlbumCollectionViewCell
+        cell?.albumImageView.image = nil
         if let albumArtworkURL = albumItunesData?.results[indexPath.row].artworkUrl100 {
-            cell.albumImageView.downloadedFrom(url: albumArtworkURL)
+            cell?.albumImageView.downloadedFrom(url: albumArtworkURL)
         } else {
-            cell.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
+            cell?.albumImageView.image = #imageLiteral(resourceName: "noArtwork")
         }
 
-        cell.albumNameLabel.text = albumItunesData?.results[indexPath.row].collectionName
-        cell.albumAuthorLabel.text = albumItunesData?.results[indexPath.row].artistName
-        cell.albumImageView.layer.cornerRadius = 10
-        cell.albumImageView.layer.masksToBounds = true
+        cell?.albumNameLabel.text = albumItunesData?.results[indexPath.row].collectionName
+        cell?.albumAuthorLabel.text = albumItunesData?.results[indexPath.row].artistName
 
-        return cell
+        return cell!
     }
 
     // MARK: - SearchBar
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if (kind == UICollectionElementKindSectionHeader) {
-            let headerView: UICollectionReusableView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath)
+
+    private let searchCollectionReusableView = SearchCollectionReusableView()
+    private var searchText: String!
+
+    override func collectionView(_ collectionView: UICollectionView,
+                                 viewForSupplementaryElementOfKind kind: String,
+                                 at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionElementKindSectionHeader {
+            let headerView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionElementKindSectionHeader,
+                withReuseIdentifier: "CollectionViewHeader",
+                for: indexPath
+            )
             return headerView
         }
         return UICollectionReusableView()
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if (!(searchBar.text?.isEmpty)!) {
+        if !(searchBar.text?.isEmpty)! {
             getAlbums(for: searchBar.text!)
             searchText = searchBar.text!
             searchBar.endEditing(true)
@@ -95,59 +95,56 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         }
     }
 
-    // MARK: - NoDataStackView
+    // MARK: - NoDataView
 
-    /// noDataStackView status.
+    private let noDataView = NoDataView.createView()
+
+    @objc func refreshButton(_ sender: UIButton) {
+        getAlbums(for: searchText)
+    }
+
+    /// noDataView status.
     private enum ScreenStatus {
         case startSearch
         case noResult
         case error
         case haveResult
     }
-    
-    /// Hide noData Stuff
-    ///
-    /// - parameter isHidden: Hide or no
-    private func noDataStuffIsHidden(_ isHidden: Bool) {
-        noDataImage.isHidden = isHidden
-        noDataLabel.isHidden = isHidden
-        reloadButton.isHidden = isHidden
-    }
 
-    /// Setup noDataStackView for status.
+    /// Setup noDataView for status.
     ///
     /// - parameter status: status for noDataStackView.
     private func setupFor(status: ScreenStatus, error: Error? = nil) {
         switch status {
         case .haveResult:
-            noDataStuffIsHidden(true)
+            noDataView.removeFromSuperview()
         case .startSearch:
-            noDataStuffIsHidden(false)
-            reloadButton.isHidden = true
-            noDataLabel.text = "Start your search"
+            noDataView.reloadButton.isHidden = true
+            noDataView.noDataLabel.text = "Start your search"
+            view.addSubview(noDataView)
         case .noResult:
-            noDataStuffIsHidden(false)
-            reloadButton.isHidden = true
-            noDataLabel.text = "No results"
+            noDataView.reloadButton.isHidden = true
+            noDataView.noDataLabel.text = "No results"
+            view.addSubview(noDataView)
         case .error:
-            noDataStuffIsHidden(false)
-            reloadButton.isHidden = false
-            noDataLabel.text = error?.localizedDescription
+            noDataView.reloadButton.isHidden = false
+            noDataView.noDataLabel.text = error?.localizedDescription
+            view.addSubview(noDataView)
         }
     }
-    
+
     // MARK: - Keyboard
-    
+
     private func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
-    
+
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
+
     /// Search albums in iTunes database by name, download and parse it.
     ///
     /// - parameter name: searching string.
@@ -157,7 +154,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
         if let encoded = urlString.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) {
             guard let url = URL(string: encoded) else { return }
             let session = URLSession.shared
-            session.dataTask(with: url) { (data, response, error) in
+            session.dataTask(with: url) { (data, _, error) in
                 guard let data = data else {
                     DispatchQueue.main.async {
                         self.albumItunesData = nil
@@ -170,7 +167,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
                     let decoder = JSONDecoder()
                     self.albumItunesData = nil
                     self.albumItunesData = try decoder.decode(AlbumItunesData.self, from: data)
-                    
+
                     DispatchQueue.main.async {
                         if self.albumItunesData?.resultCount == 0 {
                             self.setupFor(status: .noResult)
@@ -192,7 +189,7 @@ class AlbumsCollectionViewController: UICollectionViewController, UISearchBarDel
 }
 
 extension UIImageView {
-    
+
     /// Download image by URL.
     ///
     /// - parameter url: image url.
@@ -206,19 +203,10 @@ extension UIImageView {
                 let data = data, error == nil,
                 let image = UIImage(data: data)
                 else { return }
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 self.image = image
             }
             }.resume()
-    }
-}
-
-extension UIView {
-
-    /// Make view corners rounded.
-    func makeRounded() {
-        self.layer.cornerRadius = 8.0
-        self.clipsToBounds = true
     }
 }
 

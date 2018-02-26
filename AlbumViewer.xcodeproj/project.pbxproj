@@ -17,6 +17,11 @@
 		0C40B0E8202CC884007D4B0F /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C40B0E7202CC884007D4B0F /* AlbumModel.swift */; };
 		0C4AFF642033E91400DFDE72 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0C4AFF632033E91400DFDE72 /* README.md */; };
 		0C6E1E732031464D00F2A15B /* SearchCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */; };
+		0C82F1B72043513A000A116E /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C82F1B62043513A000A116E /* CustomLabel.swift */; };
+		0C82F1BA20435A81000A116E /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C82F1B920435A81000A116E /* CustomButton.swift */; };
+		0C82F1BE204365E6000A116E /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C82F1BD204365E6000A116E /* CustomImageView.swift */; };
+		0C82F1CE20438231000A116E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C82F1CD20438231000A116E /* NoDataView.xib */; };
+		0C82F1D0204386F7000A116E /* NoDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C82F1CF204386F7000A116E /* NoDataView.swift */; };
 		0CD18CF4202D4370004B4DEC /* AlbumsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CF3202D4370004B4DEC /* AlbumsCollectionViewController.swift */; };
 		0CD18CFC202D4FEB004B4DEC /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */; };
 		0CD18CFE202D59B2004B4DEC /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD18CFD202D59B2004B4DEC /* DetailsViewController.swift */; };
@@ -57,6 +62,11 @@
 		0C40B0E7202CC884007D4B0F /* AlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
 		0C4AFF632033E91400DFDE72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionReusableView.swift; sourceTree = "<group>"; };
+		0C82F1B62043513A000A116E /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
+		0C82F1B920435A81000A116E /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		0C82F1BD204365E6000A116E /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		0C82F1CD20438231000A116E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
+		0C82F1CF204386F7000A116E /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		0CD18CF3202D4370004B4DEC /* AlbumsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCollectionViewController.swift; sourceTree = "<group>"; };
 		0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		0CD18CFD202D59B2004B4DEC /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -110,7 +120,10 @@
 			isa = PBXGroup;
 			children = (
 				0C3ED81C203DB6B600EC23E9 /* AlbumView */,
-				0CE4C7392032591A0043681D /* TrackTableViewCell.swift */,
+				0C82F1B8204359CA000A116E /* DetailsView */,
+				0C82F1BD204365E6000A116E /* CustomImageView.swift */,
+				0C82F1B62043513A000A116E /* CustomLabel.swift */,
+				0C82F1B920435A81000A116E /* CustomButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -120,6 +133,8 @@
 			children = (
 				0CD18CFB202D4FEB004B4DEC /* AlbumCollectionViewCell.swift */,
 				0C6E1E722031464D00F2A15B /* SearchCollectionReusableView.swift */,
+				0C82F1CD20438231000A116E /* NoDataView.xib */,
+				0C82F1CF204386F7000A116E /* NoDataView.swift */,
 			);
 			path = AlbumView;
 			sourceTree = "<group>";
@@ -177,6 +192,14 @@
 			path = AlbumViewerUITests;
 			sourceTree = "<group>";
 		};
+		0C82F1B8204359CA000A116E /* DetailsView */ = {
+			isa = PBXGroup;
+			children = (
+				0CE4C7392032591A0043681D /* TrackTableViewCell.swift */,
+			);
+			path = DetailsView;
+			sourceTree = "<group>";
+		};
 		0CD18CFA202D4C71004B4DEC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +219,7 @@
 				0C40B0B2202CC802007D4B0F /* Sources */,
 				0C40B0B3202CC802007D4B0F /* Frameworks */,
 				0C40B0B4202CC802007D4B0F /* Resources */,
+				0C82F1B420432CAD000A116E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -297,6 +321,7 @@
 				0C40B0C1202CC802007D4B0F /* Assets.xcassets in Resources */,
 				0C4AFF642033E91400DFDE72 /* README.md in Resources */,
 				0C40B0BF202CC802007D4B0F /* Main.storyboard in Resources */,
+				0C82F1CE20438231000A116E /* NoDataView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,17 +341,37 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0C82F1B420432CAD000A116E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"error: SwiftLint does not exist, download it from https://github.com/realm/SwiftLint\"\nexit 1\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0C40B0B2202CC802007D4B0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0CD18CF4202D4370004B4DEC /* AlbumsCollectionViewController.swift in Sources */,
+				0C82F1BE204365E6000A116E /* CustomImageView.swift in Sources */,
 				0C3ED81B203DB69200EC23E9 /* TrackModel.swift in Sources */,
 				0C40B0E8202CC884007D4B0F /* AlbumModel.swift in Sources */,
 				0C40B0BA202CC802007D4B0F /* AppDelegate.swift in Sources */,
+				0C82F1D0204386F7000A116E /* NoDataView.swift in Sources */,
+				0C82F1BA20435A81000A116E /* CustomButton.swift in Sources */,
 				0C6E1E732031464D00F2A15B /* SearchCollectionReusableView.swift in Sources */,
 				0CD18CFC202D4FEB004B4DEC /* AlbumCollectionViewCell.swift in Sources */,
+				0C82F1B72043513A000A116E /* CustomLabel.swift in Sources */,
 				0CD18CFE202D59B2004B4DEC /* DetailsViewController.swift in Sources */,
 				0CE4C73A2032591A0043681D /* TrackTableViewCell.swift in Sources */,
 			);

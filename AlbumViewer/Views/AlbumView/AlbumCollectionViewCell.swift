@@ -13,3 +13,10 @@ class AlbumCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var albumNameLabel: UILabel!
     @IBOutlet weak var albumAuthorLabel: UILabel!
 }
+
+extension UIView {
+    func makeRounded() {
+        self.layer.cornerRadius = 8
+        self.clipsToBounds = true
+    }
+}
