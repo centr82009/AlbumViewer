@@ -9,8 +9,8 @@
 import UIKit
 
 class NoDataView: UIView {
-    @IBOutlet weak var noDataImageView: UIImageView!
-    @IBOutlet weak var noDataLabel: UILabel!
+    @IBOutlet weak var noDataImageView: CustomImageView!
+    @IBOutlet weak var noDataLabel: CustomLabel!
     @IBOutlet weak var reloadButton: CustomButton!
 
     class func createView() -> NoDataView {
